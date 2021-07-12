@@ -18,6 +18,7 @@ module controller (
 	ImmSrc,
 	ALUControl
 );
+
 	input wire clk;
 	input wire reset;
 	input wire [31:12] Instr;
@@ -58,6 +59,7 @@ module controller (
 		.RegSrc(RegSrc),
 		.ALUControl(ALUControl)
 	);
+
 	condlogic cl(
 		.clk(clk),
 		.reset(reset),
@@ -72,4 +74,5 @@ module controller (
 		.RegWrite(RegWrite),
 		.MemWrite(MemWrite)
 	);
+
 endmodule

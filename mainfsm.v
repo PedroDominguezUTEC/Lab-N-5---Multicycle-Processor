@@ -14,6 +14,7 @@ module mainfsm (
 	Branch,
 	ALUOp
 );
+
 	input wire clk;
 	input wire reset;
 	input wire [1:0] Op;
@@ -32,11 +33,15 @@ module mainfsm (
 	reg [3:0] nextstate;
 	reg [12:0] controls;
 	localparam [3:0] FETCH = 0;
-	localparam [3:0] BRANCH = 9;
 	localparam [3:0] DECODE = 1;
-	localparam [3:0] EXECUTEI = 7;
-	localparam [3:0] EXECUTER = 6;
 	localparam [3:0] MEMADR = 2;
+  	localparam [3:0] MEMRD = 3;
+  	localparam [3:0] MEMWB = 4;
+  	localparam [3:0] MEMWR = 5;
+	localparam [3:0] EXECUTER = 6;
+	localparam [3:0] EXECUTEI = 7;
+  	localparam [3:0] ALUWB = 8;
+	localparam [3:0] BRANCH = 9;
 	localparam [3:0] UNKNOWN = 10;
 
 	// state register
@@ -46,13 +51,8 @@ module mainfsm (
 		else
 			state <= nextstate;
 	
-
-	// ADD CODE BELOW
-  	// Finish entering the next state logic below.  We've completed the 
-  	// first two states, FETCH and DECODE, for you.
-
-  	// next state logic
-	always @(*)
+  	// Next state logic
+	always @(state)
 		casex (state)
 			FETCH: nextstate = DECODE;
 			DECODE:
@@ -66,10 +66,17 @@ module mainfsm (
 					2'b10: nextstate = BRANCH;
 					default: nextstate = UNKNOWN;
 				endcase
-			EXECUTER:
-			EXECUTEI:
+			EXECUTER: nextstate = ALUWB;
+			EXECUTEI: nextstate = ALUWB;
 			MEMADR:
-			MEMRD:
+				if(Funct[0])
+					nextstate = MEMRD;
+				else
+					nextstate = MEMWR;
+			MEMRD: nextstate = MEMWB;
+			MEMWB: nextstate = FETCH;
+			MEMWR: nextstate = FETCH;
+			ALUWB: nextstate = FETCH;
 			default: nextstate = FETCH;
 		endcase
 
@@ -77,19 +84,19 @@ module mainfsm (
 	// Finish entering the output logic below.  We've entered the
 	// output logic for the first two states, FETCH and DECODE, for you.
 
-	// state-dependent output logic
-	always @(*)
+	// State-dependent output logic
+	always @(state)
 		case (state)
 			FETCH: controls = 13'b1000101001100;
 			DECODE: controls = 13'b0000001001100;
-			EXECUTER: 
-			EXECUTEI: 
-			ALUWB: 
-			MEMADR: 
-			MEMWR: 
-			MEMRD: 
-			MEMWB: 
-			BRANCH: 
+			EXECUTER: controls = 13'b0000000000001;
+			EXECUTEI: controls = 13'b0000000000011;
+			ALUWB: controls = 13'b0001000000000;
+			MEMADR: controls = 13'b0000000000010;
+			MEMWR: controls = 13'b0010010000000;
+			MEMRD: controls = 13'b0000010000000;
+			MEMWB: controls = 13'b0001000100000;
+			BRANCH: controls = 13'b0100001000010;
 			default: controls = 13'bxxxxxxxxxxxxx;
 		endcase
 	assign {NextPC, Branch, MemW, RegW, IRWrite, AdrSrc, ResultSrc, ALUSrcA, ALUSrcB, ALUOp} = controls;

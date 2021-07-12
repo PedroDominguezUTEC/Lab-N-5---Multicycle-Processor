@@ -1,8 +1,6 @@
-// ADD CODE BELOW
-// Add code for the condlogic and condcheck modules. Remember, you may
-// reuse code from prior labs.
-
-//include mux2
+`include "flopenr.v"
+`include "flopr.v"
+`include "condcheck.v"
 
 module condlogic (
 	clk,
@@ -18,6 +16,7 @@ module condlogic (
 	RegWrite,
 	MemWrite
 );
+
 	input wire clk;
 	input wire reset;
 	input wire [3:0] Cond;
@@ -34,7 +33,27 @@ module condlogic (
 	wire [3:0] Flags;
 	wire CondEx;
 
-	// Delay writing flags until ALUWB state
+
+  
+  
+	// ADD CODE HERE
+		flopenr #(2) flagreg1(
+		.clk(clk),
+		.reset(reset),
+		.en(FlagWrite[1]),
+		.d(ALUFlags[3:2]),
+		.q(Flags[3:2])
+	);
+  
+	flopenr #(2) flagreg0(
+		.clk(clk),
+		.reset(reset),
+		.en(FlagWrite[0]),
+		.d(ALUFlags[1:0]),
+		.q(Flags[1:0])
+	);
+
+// Delay writing flags until ALUWB state
 	flopr #(2) flagwritereg(
 		clk,
 		reset,
@@ -42,6 +61,23 @@ module condlogic (
 		FlagWrite
 	);
 
-	// ADD CODE HERE
-
+//CondEX flipflop
+  flopr condexes(
+		clk,
+		reset,
+		CondEx,
+		CondEx
+	);
+  
+	condcheck cc(
+		.Cond(Cond),
+		.Flags(Flags),
+		.CondEx(CondEx)
+	);
+  
+  assign FlagWrite = FlagW & {2 {CondEx}};
+	assign RegWrite = RegW & CondEx;
+	assign MemWrite = MemW & CondEx;
+  assign PCWrite = NextPC | (PCS & CondEx);
+  
 endmodule

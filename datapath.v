@@ -1,11 +1,3 @@
-// ADD CODE BELOW
-// Complete the datapath module below for Lab 11.
-// You do not need to complete this module for Lab 10.
-// The datapath unit is a structural SystemVerilog module. That is,
-// it is composed of instances of its sub-modules. For example,
-// the instruction register is instantiated as a 32-bit flopenr.
-// The other submodules are likewise instantiated. 
-
 module datapath (
 	clk,
 	reset,
@@ -25,6 +17,7 @@ module datapath (
 	ImmSrc,
 	ALUControl
 );
+
 	input wire clk;
 	input wire reset;
 	output wire [31:0] Adr;
@@ -64,4 +57,15 @@ module datapath (
 	// (Address Mux), etc. so that your code is easier to understand.
 
 	// ADD CODE HERE
+
+
+	flopenr datos(
+		clk,
+		reset,
+		IRWrite,
+		ReadData,
+		Instr
+	);
+
+
 endmodule

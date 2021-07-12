@@ -20,12 +20,13 @@ module decode (
 	RegSrc,
 	ALUControl
 );
+
 	input wire clk;
 	input wire reset;
 	input wire [1:0] Op;
 	input wire [5:0] Funct;
 	input wire [3:0] Rd;
-	output wire [1:0] FlagW;
+	output reg [1:0] FlagW;
 	output wire PCS;
 	output wire NextPC;
 	output wire RegW;
@@ -37,9 +38,10 @@ module decode (
 	output wire [1:0] ALUSrcB;
 	output wire [1:0] ImmSrc;
 	output wire [1:0] RegSrc;
-	output wire [1:0] ALUControl;
+	output reg [1:0] ALUControl;
 	wire Branch;
 	wire ALUOp;
+
 
 	// Main FSM
 	mainfsm fsm(
@@ -65,12 +67,30 @@ module decode (
 	// ALU Decoder
 
 	// PC Logic
-
-
-	// Add code for the Instruction Decoder (Instr Decoder) below.
-	// Recall that the input to Instr Decoder is Op, and the outputs are
-	// ImmSrc and RegSrc. We've completed the ImmSrc logic for you.
-
-	// Instr Decoder
+  assign PCS = ((Rd == 4'b1111) & RegW) | Branch;
+  
+  //ALU decoder
+  always @(*)
+      if (ALUOp) begin
+          case (Funct[4:1])
+            4'b0100: ALUControl = 2'b00;
+            4'b0010: ALUControl = 2'b01;
+            4'b0000: ALUControl = 2'b10;
+            4'b1100: ALUControl = 2'b11;
+            4'b0001: ALUControl = 2'b01;
+            default: ALUControl = 2'bxx;
+          endcase
+        FlagW[1] = Funct[0];
+        FlagW[0] = Funct[0] & ((ALUControl == 3'b000) | (ALUControl == 3'b001));
+      end
+      else begin
+        ALUControl = 3'b000;
+        FlagW = 2'b00;
+      end
+  
+ 
 	assign ImmSrc = Op;
+	assign RegSrc[1] = (Op == 2'b01);
+	assign RegSrc[0] = (Op == 2'b10);
+  
 endmodule
