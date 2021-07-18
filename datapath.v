@@ -115,6 +115,26 @@ module datapath (
 		SrcA
 	);
 
+	///// REGFILE Y IMMEDIATE
+
+	regfile rf(
+		.clk(clk),
+		.we3(RegWrite),
+		.ra1(RA1),
+		.ra2(RA2),
+		.wa3(Instr[15:12]),
+		.wd3(Result),
+		.r15(Result),
+		.rd1(SrcA),
+		.rd2(WriteData)
+	);
+
+	extend ext(
+		.Instr(Instr[23:0]),
+		.ImmSrc(ImmSrc),
+		.ExtImm(ExtImm)
+	);
+
 	/////// SrcB
 
 	mux2 #(4) ra2mux(
