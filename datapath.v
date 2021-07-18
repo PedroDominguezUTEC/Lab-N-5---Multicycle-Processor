@@ -1,3 +1,9 @@
+`include "regfile.v"
+`include "extend.v"
+`include "mux2.v"
+`include "mux3.v"
+`include "ALU.v"
+
 module datapath (
 	clk,
 	reset,
@@ -52,15 +58,6 @@ module datapath (
 
 	parameter PC4 = 32'b00000000000000000000000000000100;
 
-	// Your datapath hardware goes below. Instantiate each of the 
-	// submodules that you need. Remember that you can reuse hardware
-	// from previous labs. Be sure to give your instantiated modules 
-	// applicable names such as pcreg (PC register), adrmux 
-	// (Address Mux), etc. so that your code is easier to understand.
-
-	// ADD CODE HERE
-
-
 	// PC
 	flopenr pcreg(
 		clk,
@@ -90,7 +87,7 @@ module datapath (
 		clk,
 		reset,
 		ReadData,
-		Instr
+		Data
 	);
 
 	/////// SrcA
@@ -125,8 +122,8 @@ module datapath (
 		.wa3(Instr[15:12]),
 		.wd3(Result),
 		.r15(Result),
-		.rd1(SrcA),
-		.rd2(WriteData)
+		.rd1(RD1),
+		.rd2(RD2)
 	);
 
 	extend ext(
@@ -151,7 +148,6 @@ module datapath (
 		WriteData
 	);
 
-
 	mux3 #(32) muxALUSrcB(
 		WriteData,
 		ExtImm,
@@ -161,14 +157,13 @@ module datapath (
 	);
 
 	//////ALU
-	alu alu(
+	ALU ALU(
 		.SrcA (SrcA),
 		.SrcB (SrcB),
 		.ALUControl (ALUControl),
 		.Result (ALUResult),
 		.ALUFlags (ALUFlags)
 	);
-
 
 	/////// FINISH ALU
 	flopr ALUflopr(

@@ -37,7 +37,7 @@ module condlogic (
   
   
 	// ADD CODE HERE
-		flopenr #(2) flagreg1(
+	flopenr #(2) flagreg1(
 		.clk(clk),
 		.reset(reset),
 		.en(FlagWrite[1]),
@@ -62,7 +62,7 @@ module condlogic (
 	);
 
 //CondEX flipflop
-  flopr condexes(
+  	flopr condexes(
 		clk,
 		reset,
 		CondEx,
@@ -75,9 +75,9 @@ module condlogic (
 		.CondEx(CondEx)
 	);
   
-  assign FlagWrite = FlagW & {2 {CondEx}};
+  	assign FlagWrite = FlagW & {2 {CondEx}};
 	assign RegWrite = RegW & CondEx;
 	assign MemWrite = MemW & CondEx;
-  assign PCWrite = NextPC | (PCS & CondEx);
+  	assign PCWrite = NextPC | (PCS & CondEx);
   
 endmodule
