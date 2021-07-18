@@ -140,6 +140,16 @@ module datapath (
 		SrcB
 	);
 
+	//////ALU
+	alu alu(
+		.SrcA (SrcA),
+		.SrcB (SrcB),
+		.ALUControl (ALUControl),
+		.Result (ALUResult),
+		.ALUFlags (ALUFlags)
+	);
+
+
 	/////// FINISH ALU
 	flopr ALUflopr(
 		clk,
