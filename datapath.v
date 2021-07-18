@@ -50,6 +50,8 @@ module datapath (
 	wire [3:0] RA1;
 	wire [3:0] RA2;
 
+	parameter PC4 = 32'b00000000000000000000000000000100;
+
 	// Your datapath hardware goes below. Instantiate each of the 
 	// submodules that you need. Remember that you can reuse hardware
 	// from previous labs. Be sure to give your instantiated modules 
@@ -59,6 +61,22 @@ module datapath (
 	// ADD CODE HERE
 
 
+	// PC
+	flopenr pcreg(
+		clk,
+		reset,
+		PCWrite,
+		PCNext,
+		PC
+	);
+
+	mux2 #(32) instruct(
+		PC,
+		Result,
+		AdrSrc,
+		Adr,
+	);
+
 	flopenr datos(
 		clk,
 		reset,
@@ -67,5 +85,74 @@ module datapath (
 		Instr
 	);
 
+	//// DATA FROM MEMORY (LDR)
+	flopr data_from_memory(
+		clk,
+		reset,
+		ReadData,
+		Instr
+	);
+
+	/////// SrcA
+	mux2 #(4) ra1mux(
+		.d0(Instr[19:16]),
+		.d1(4'b1111),
+		.s(RegSrc[0]),
+		.y(RA1)
+	);
+
+	flopr r1(
+		clk,
+		reset,
+		RD1,
+		A
+	);
+
+	mux2 #(32) muxALUSrcA(
+		PC,
+		A,
+		ALUSrcA,
+		SrcA
+	);
+
+	/////// SrcB
+
+	mux2 #(4) ra2mux(
+		.d0(Instr[3:0]),
+		.d1(Instr[15:12]),
+		.s(RegSrc[1]),
+		.y(RA2)
+	);
+
+	flopr r2(
+		clk,
+		reset,
+		RD2,
+		WriteData
+	);
+
+
+	mux3 #(32) muxALUSrcB(
+		WriteData,
+		ExtImm,
+		PC4,
+		ALUSrcB,
+		SrcB
+	);
+
+	/////// FINISH ALU
+	flopr ALUflopr(
+		clk,
+		reset,
+		ALUResult,
+		ALUOut
+	);
+	mux3 #(32) muxResult(
+		ALUOut,
+		Data,
+		ALUResult,
+		ResultSrc,
+		Result
+	);
 
 endmodule

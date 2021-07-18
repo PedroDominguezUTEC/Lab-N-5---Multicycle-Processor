@@ -11,9 +11,9 @@ module mem (
 	input wire [31:0] a;
 	input wire [31:0] wd;
 	output wire [31:0] rd;
-	reg [31:0] RAM [0:2];
+	reg [31:0] RAM [0:23];
 	initial $readmemh("memfile.dat", RAM);
-	assign rd = RAM[a[31:2]]; // word aligned
+	assign rd = RAM[a[31:2]];
 	
 	always @(posedge clk)
 		if (we)
