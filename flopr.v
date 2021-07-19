@@ -2,7 +2,6 @@ module flopr (
 	clk,
 	reset,
 	d,
-
 	q
 );
 	parameter WIDTH = 8;
@@ -10,7 +9,7 @@ module flopr (
 	input wire reset;
 	input wire [WIDTH - 1:0] d;
 	output reg [WIDTH - 1:0] q;
-  always @(posedge clk or posedge reset)
+  	always @(posedge clk or posedge reset)
 		if (reset)
 			q <= 0;
 		else

@@ -90,7 +90,7 @@ module datapath (
 		Data
 	);
 
-		mux2 #(4) ra1mux(
+	mux2 #(4) ra1mux(
 		.d0(Instr[19:16]),
 		.d1(4'b1111),
 		.s({2{RegSrc[0]}}),
@@ -137,16 +137,6 @@ module datapath (
 		SrcA
 	);
 
-
-	/////// SrcA
-
-
-
-
-	///// REGFILE Y IMMEDIATE
-
-
-
 	extend ext(
 		.Instr(Instr[23:0]),
 		.ImmSrc(ImmSrc),
@@ -154,11 +144,6 @@ module datapath (
 	);
 
 	/////// SrcB
-
-
-
-
-
 	mux3 #(32) muxALUSrcB(
 		WriteData,
 		ExtImm,
@@ -183,6 +168,7 @@ module datapath (
 		ALUResult,
 		ALUOut
 	);
+	
 	mux3 #(32) muxResult(
 		ALUOut,
 		Data,

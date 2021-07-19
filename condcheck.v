@@ -15,7 +15,7 @@ module condcheck (
 	wire overflow;
 	wire ge;
 	assign {neg, zero, carry, overflow} = Flags;
-	assign ge = neg == overflow;
+	assign ge = (neg == overflow);
 	always @(*)
 		case (Cond)
 			4'b0000: CondEx = zero;

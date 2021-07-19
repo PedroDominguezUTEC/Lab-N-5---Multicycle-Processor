@@ -87,16 +87,16 @@ module mainfsm (
 
 	// State-dependent output logic
 	always @(*)
-		case (state)
+		case (state)	
 			FETCH: controls = 13'b1000101001100;
 			DECODE: controls = 13'b0000001001100;
 			EXECUTER: controls = 13'b0000000000001;
 			EXECUTEI: controls = 13'b0000000000011;
 			ALUWB: controls = 13'b0001000000000;
-			MEMADR: controls = 13'b0000000000010;
-			MEMWR: controls = 13'b0010010000000;
-			MEMRD: controls = 13'b0000010000000;
-			MEMWB: controls = 13'b0001000100000;
+			MEMADR: controls = 13'b0000000000010; //2
+			MEMWR: controls = 13'b0010010000000; // 5
+			MEMRD: controls = 13'b0000010000000; //3
+			MEMWB: controls = 13'b0001000100000; //4
 			BRANCH: controls = 13'b0100001000010;
 			default: controls = 13'bxxxxxxxxxxxxx;
 		endcase
