@@ -53,13 +53,13 @@ module mainfsm (
 			state <= nextstate;
 	
   	// Next state logic
-	always @(state)
+	always @(*)
 		casex (state)
 			FETCH: nextstate = DECODE;
 			DECODE:
 				case (Op)
 					2'b00:
-						if (Funct[5])
+						if (Funct[5] == 1'b1)
 							nextstate = EXECUTEI;
 						else
 							nextstate = EXECUTER;
@@ -86,7 +86,7 @@ module mainfsm (
 	// output logic for the first two states, FETCH and DECODE, for you.
 
 	// State-dependent output logic
-	always @(state)
+	always @(*)
 		case (state)
 			FETCH: controls = 13'b1000101001100;
 			DECODE: controls = 13'b0000001001100;

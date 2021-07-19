@@ -49,7 +49,7 @@ module condlogic (
 		.d(ALUFlags[1:0]),
 		.q(Flags[1:0])
 	);
-/*
+
 // Delay writing flags until ALUWB state
 	flopr #(2) flagwritereg(
 		clk,
@@ -57,7 +57,7 @@ module condlogic (
 		FlagW & {2 {CondEx}},
 		FlagWrite
 	);
-*/
+
 
 //CondEX flipflop
   	flopr #(1) condexes(

@@ -17,7 +17,7 @@ module testbench;
 	);
 	initial begin
 		reset <= 1;
-    	#(22);
+    	#(20);
 		reset <= 0;
 	end
 	always begin
@@ -38,7 +38,7 @@ module testbench;
 			end
 
 	initial begin
-		#200
+		#2000
 		$finish;
 	end
 
