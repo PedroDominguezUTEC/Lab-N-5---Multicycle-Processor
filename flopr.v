@@ -16,3 +16,22 @@ module flopr (
 		else
 			q <= d;
 endmodule
+
+module flopr2 (
+	clk,
+	reset,
+	d,
+
+	q
+);
+	//parameter WIDTH = 8;
+	input wire clk;
+	input wire reset;
+	input wire [31:0] d;
+	output reg [31:0] q;
+  always @(posedge clk or posedge reset)
+		if (reset)
+			q <= 0;
+		else
+			q <= d;
+endmodule

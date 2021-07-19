@@ -34,7 +34,7 @@ module decode (
 	output wire IRWrite;
 	output wire AdrSrc;
 	output wire [1:0] ResultSrc;
-	output wire [1:0] ALUSrcA;
+	output wire ALUSrcA;
 	output wire [1:0] ALUSrcB;
 	output wire [1:0] ImmSrc;
 	output wire [1:0] RegSrc;
@@ -77,14 +77,14 @@ module decode (
             4'b0010: ALUControl = 2'b01;
             4'b0000: ALUControl = 2'b10;
             4'b1100: ALUControl = 2'b11;
-            4'b0001: ALUControl = 2'b01;
+            
             default: ALUControl = 2'bxx;
           endcase
         FlagW[1] = Funct[0];
-        FlagW[0] = Funct[0] & ((ALUControl == 3'b000) | (ALUControl == 3'b001));
+        FlagW[0] = Funct[0] & ((ALUControl == 2'b00) | (ALUControl == 2'b01));
       end
       else begin
-        ALUControl = 3'b000;
+        ALUControl = 2'b00;
         FlagW = 2'b00;
       end
   

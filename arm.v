@@ -15,6 +15,7 @@ module arm (
 	output wire [31:0] Adr;
 	output wire [31:0] WriteData;
 	input wire [31:0] ReadData;
+
 	wire [31:0] Instr;
 	wire [3:0] ALUFlags;
 	wire PCWrite;
@@ -22,7 +23,7 @@ module arm (
 	wire IRWrite;
 	wire AdrSrc;
 	wire [1:0] RegSrc;
-	wire [1:0] ALUSrcA;
+	wire ALUSrcA;
 	wire [1:0] ALUSrcB;
 	wire [1:0] ImmSrc;
 	wire [1:0] ALUControl;

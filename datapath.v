@@ -59,7 +59,7 @@ module datapath (
 	parameter PC4 = 32'b00000000000000000000000000000100;
 
 	// PC
-	flopenr pcreg(
+	flopenr2 pcreg(
 		clk,
 		reset,
 		PCWrite,
@@ -67,14 +67,14 @@ module datapath (
 		PC
 	);
 
-	mux2 #(32) instruct(
+	mux2_1 instruct(
 		PC,
 		Result,
 		AdrSrc,
-		Adr,
+		Adr
 	);
 
-	flopenr datos(
+	flopenr2 datos(
 		clk,
 		reset,
 		IRWrite,
@@ -83,7 +83,7 @@ module datapath (
 	);
 
 	//// DATA FROM MEMORY (LDR)
-	flopr data_from_memory(
+	flopr2 data_from_memory(
 		clk,
 		reset,
 		ReadData,
@@ -98,14 +98,14 @@ module datapath (
 		.y(RA1)
 	);
 
-	flopr r1(
+	flopr2 r1(
 		clk,
 		reset,
 		RD1,
 		A
 	);
 
-	mux2 #(32) muxALUSrcA(
+	mux2_1 muxALUSrcA(
 		PC,
 		A,
 		ALUSrcA,
@@ -141,14 +141,14 @@ module datapath (
 		.y(RA2)
 	);
 
-	flopr r2(
+	flopr2 r2(
 		clk,
 		reset,
 		RD2,
 		WriteData
 	);
 
-	mux3 #(32) muxALUSrcB(
+	mux3_1 muxALUSrcB(
 		WriteData,
 		ExtImm,
 		PC4,
@@ -158,21 +158,21 @@ module datapath (
 
 	//////ALU
 	ALU ALU(
-		.SrcA (SrcA),
-		.SrcB (SrcB),
+		.a (SrcA),
+		.b (SrcB),
 		.ALUControl (ALUControl),
 		.Result (ALUResult),
 		.ALUFlags (ALUFlags)
 	);
 
 	/////// FINISH ALU
-	flopr ALUflopr(
+	flopr2 ALUflopr(
 		clk,
 		reset,
 		ALUResult,
 		ALUOut
 	);
-	mux3 #(32) muxResult(
+	mux3_1 muxResult(
 		ALUOut,
 		Data,
 		ALUResult,

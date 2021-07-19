@@ -13,8 +13,6 @@ module top (
 	output wire [31:0] WriteData;
 	output wire [31:0] Adr;
 	output wire MemWrite;
-	wire [31:0] PC;
-	wire [31:0] Instr;
 	wire [31:0] ReadData;
 
 	// Instantiate processor and shared memory

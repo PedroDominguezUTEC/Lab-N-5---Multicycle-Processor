@@ -7,6 +7,7 @@ module testbench;
 	wire [31:0] WriteData;
 	wire [31:0] DataAdr;
 	wire MemWrite;
+
 	top dut(
 		.clk(clk),
 		.reset(reset),
@@ -37,7 +38,7 @@ module testbench;
 			end
 	initial
     	begin
-    	$dumpfile("multicycle.vcd");
+    	$dumpfile("tb.vcd");
   		$dumpvars;
     end
 endmodule
