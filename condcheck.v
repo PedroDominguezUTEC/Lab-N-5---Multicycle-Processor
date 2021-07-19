@@ -9,7 +9,7 @@ module condcheck (
 	output reg CondEx;
 
 	// ADD CODE HERE
-  wire neg;
+  	wire neg;
 	wire zero;
 	wire carry;
 	wire overflow;

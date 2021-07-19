@@ -17,7 +17,7 @@ module testbench;
 	);
 	initial begin
 		reset <= 1;
-    #(22);
+    	#(22);
 		reset <= 0;
 	end
 	always begin
@@ -36,8 +36,13 @@ module testbench;
 				$display("Simulation failed");
 				$stop;
 			end
-	initial
-    	begin
+
+	initial begin
+		#200
+		$finish;
+	end
+
+	initial	begin
     	$dumpfile("tb.vcd");
   		$dumpvars;
     end

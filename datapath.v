@@ -59,22 +59,22 @@ module datapath (
 	parameter PC4 = 32'b00000000000000000000000000000100;
 
 	// PC
-	flopenr2 pcreg(
+	flopenr #(32) pcreg(
 		clk,
 		reset,
 		PCWrite,
-		PCNext,
+		Result,
 		PC
 	);
 
-	mux2_1 instruct(
+	mux2 #(32) instruct(
 		PC,
-		Result,
-		AdrSrc,
+		ALUOut,
+		{2{AdrSrc}},
 		Adr
 	);
 
-	flopenr2 datos(
+	flopenr #(32) datos(
 		clk,
 		reset,
 		IRWrite,
@@ -83,36 +83,26 @@ module datapath (
 	);
 
 	//// DATA FROM MEMORY (LDR)
-	flopr2 data_from_memory(
+	flopr #(32) data_from_memory(
 		clk,
 		reset,
 		ReadData,
 		Data
 	);
 
-	/////// SrcA
-	mux2 #(4) ra1mux(
+		mux2 #(4) ra1mux(
 		.d0(Instr[19:16]),
 		.d1(4'b1111),
-		.s(RegSrc[0]),
+		.s({2{RegSrc[0]}}),
 		.y(RA1)
 	);
-
-	flopr2 r1(
-		clk,
-		reset,
-		RD1,
-		A
+		
+	mux2 #(4) ra2mux(
+		.d0(Instr[3:0]),
+		.d1(Instr[15:12]),
+		.s({2{RegSrc[1]}}),
+		.y(RA2)
 	);
-
-	mux2_1 muxALUSrcA(
-		PC,
-		A,
-		ALUSrcA,
-		SrcA
-	);
-
-	///// REGFILE Y IMMEDIATE
 
 	regfile rf(
 		.clk(clk),
@@ -126,6 +116,37 @@ module datapath (
 		.rd2(RD2)
 	);
 
+	flopr #(32) r1(
+		clk,
+		reset,
+		RD1,
+		A
+	);
+
+	flopr #(32) r2(
+		clk,
+		reset,
+		RD2,
+		WriteData
+	);
+	
+	mux2 #(32) muxALUSrcA(
+		A,
+		PC,
+		ALUSrcA,
+		SrcA
+	);
+
+
+	/////// SrcA
+
+
+
+
+	///// REGFILE Y IMMEDIATE
+
+
+
 	extend ext(
 		.Instr(Instr[23:0]),
 		.ImmSrc(ImmSrc),
@@ -134,24 +155,14 @@ module datapath (
 
 	/////// SrcB
 
-	mux2 #(4) ra2mux(
-		.d0(Instr[3:0]),
-		.d1(Instr[15:12]),
-		.s(RegSrc[1]),
-		.y(RA2)
-	);
 
-	flopr2 r2(
-		clk,
-		reset,
-		RD2,
-		WriteData
-	);
 
-	mux3_1 muxALUSrcB(
+
+
+	mux3 #(32) muxALUSrcB(
 		WriteData,
 		ExtImm,
-		PC4,
+		32'b00000000000000000000000000000100,
 		ALUSrcB,
 		SrcB
 	);
@@ -166,13 +177,13 @@ module datapath (
 	);
 
 	/////// FINISH ALU
-	flopr2 ALUflopr(
+	flopr #(32) ALUflopr(
 		clk,
 		reset,
 		ALUResult,
 		ALUOut
 	);
-	mux3_1 muxResult(
+	mux3 #(32) muxResult(
 		ALUOut,
 		Data,
 		ALUResult,
@@ -181,3 +192,5 @@ module datapath (
 	);
 
 endmodule
+
+//change

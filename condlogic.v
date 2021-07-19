@@ -31,11 +31,8 @@ module condlogic (
 	output wire MemWrite;
 	wire [1:0] FlagWrite;
 	wire [3:0] Flags;
-	wire CondEx;
+	wire CondEx, CondExDelayed;
 
-
-  
-  
 	// ADD CODE HERE
 	flopenr #(2) flagreg1(
 		.clk(clk),
@@ -52,7 +49,7 @@ module condlogic (
 		.d(ALUFlags[1:0]),
 		.q(Flags[1:0])
 	);
-
+/*
 // Delay writing flags until ALUWB state
 	flopr #(2) flagwritereg(
 		clk,
@@ -60,13 +57,14 @@ module condlogic (
 		FlagW & {2 {CondEx}},
 		FlagWrite
 	);
+*/
 
 //CondEX flipflop
-  	flopr condexes(
+  	flopr #(1) condexes(
 		clk,
 		reset,
 		CondEx,
-		CondEx
+		CondExDelayed
 	);
   
 	condcheck cc(
@@ -76,8 +74,8 @@ module condlogic (
 	);
   
   	assign FlagWrite = FlagW & {2 {CondEx}};
-	assign RegWrite = RegW & CondEx;
-	assign MemWrite = MemW & CondEx;
-  	assign PCWrite = NextPC | (PCS & CondEx);
+	assign RegWrite = RegW & CondExDelayed;
+	assign MemWrite = MemW & CondExDelayed;
+  	assign PCWrite = NextPC | (PCS & CondExDelayed);
   
 endmodule
