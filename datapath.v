@@ -69,7 +69,7 @@ module datapath (
 
 	mux2 #(32) instruct(
 		PC,
-		ALUOut,
+		Result,
 		{2{AdrSrc}},
 		Adr
 	);
