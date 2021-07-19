@@ -58,7 +58,6 @@ module condlogic (
 		FlagWrite
 	);
 
-
 //CondEX flipflop
   	flopr #(1) condexes(
 		clk,
